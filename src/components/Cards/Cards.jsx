@@ -110,6 +110,12 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     // Победа - все карты на поле открыты
     if (isPlayerWon) {
       finishGame(STATUS_WON);
+      if (lives === 2) {
+        setLives(lives + 1);
+      }
+      if (lives === 1) {
+        setLives(lives + 2);
+      }
       return;
     }
 
