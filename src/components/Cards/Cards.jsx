@@ -16,6 +16,9 @@ const STATUS_IN_PROGRESS = "STATUS_IN_PROGRESS";
 // Начало игры: игрок видит все карты в течении нескольких секунд
 const STATUS_PREVIEW = "STATUS_PREVIEW";
 
+const STATUS_PAUSE = "STATUS_PAUSE";
+let pauseTimer = false;
+
 function getTimerValue(startDate, endDate) {
   if (!startDate && !endDate) {
     return {
@@ -26,6 +29,15 @@ function getTimerValue(startDate, endDate) {
 
   if (endDate === null) {
     endDate = new Date();
+  }
+  if (pauseTimer === true) {
+    const diffInSecconds = Math.floor((endDate.getTime() - 5000 - startDate.getTime()) / 1000);
+    const minutes = Math.floor(diffInSecconds / 60);
+    const seconds = diffInSecconds % 60;
+    return {
+      minutes,
+      seconds,
+    };
   }
 
   const diffInSecconds = Math.floor((endDate.getTime() - startDate.getTime()) / 1000);
@@ -43,6 +55,7 @@ function getTimerValue(startDate, endDate) {
  * previewSeconds - сколько секунд пользователь будет видеть все карты открытыми до начала игры
  */
 export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
+  const [isPause, setIsPause] = useState(false);
   const { leaderboardPlayers, setLeaderboardPlayers } = useGameContext();
   // console.log(leaderboardPlayers?.leaders[leaderboardPlayers?.leaders?.length - 1]);
   useEffect(() => {
@@ -68,12 +81,19 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     seconds: 0,
     minutes: 0,
   });
+  const [achievement, setAchievement] = useState(isEasyMode ? [1] : []);
 
+  const [superPowers, setSuperPowers] = useState({
+    vision: true,
+    alohomora: true,
+  });
   function finishGame(status = STATUS_LOST) {
     setGameEndDate(new Date());
     setStatus(status);
   }
   function startGame() {
+    setIsPause(isPause);
+    console.log(isPause);
     const startDate = new Date();
     setGameEndDate(null);
     setGameStartDate(startDate);
@@ -81,6 +101,11 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setStatus(STATUS_IN_PROGRESS);
   }
   function resetGame() {
+    setSuperPowers({
+      vision: true,
+      alohomora: true,
+    });
+    setIsPause(false);
     setGameStartDate(null);
     setGameEndDate(null);
     setTimer(getTimerValue(null, null));
@@ -177,7 +202,50 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
     // ... игра продолжается
   };
+  function vision() {
+    setSuperPowers({ ...superPowers, vision: false });
 
+    const openedCards = cards;
+    const viewCards = cards.map(card => ({
+      ...card,
+      open: true,
+    }));
+
+    setCards(viewCards);
+    setIsPause(true);
+    // pauseTimer = true;
+    setStatus(STATUS_PAUSE);
+
+    setTimeout(() => {
+      setCards(openedCards);
+      setStatus(STATUS_IN_PROGRESS);
+    }, 5000);
+    if (!achievement.includes(2)) {
+      setAchievement([...achievement, 2]);
+    }
+  }
+  function alohomora() {
+    setSuperPowers({ ...superPowers, alohomora: false });
+
+    const closedCards = cards.filter(card => !card.open);
+    const randomCard = closedCards[Math.floor(Math.random() * closedCards.length)];
+    const pairsCard = closedCards.filter(
+      closedCard =>
+        closedCard.suit === randomCard.suit && closedCard.rank === randomCard.rank && randomCard.id !== closedCard.id,
+    );
+    setCards(
+      cards.map(card => {
+        if (card === randomCard || card === pairsCard[0]) {
+          return { ...card, open: true };
+        } else {
+          return card;
+        }
+      }),
+    );
+    if (!achievement.includes(2)) {
+      setAchievement([...achievement, 2]);
+    }
+  }
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;
 
   // Игровой цикл
@@ -209,12 +277,17 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   // Обновляем значение таймера в интервале
   useEffect(() => {
     const intervalId = setInterval(() => {
+      if (status === STATUS_PAUSE) {
+        pauseTimer = true;
+        // setGameStartDate(new Date(new Date().getTime() - 5000));
+        return;
+      }
       setTimer(getTimerValue(gameStartDate, gameEndDate));
     }, 300);
     return () => {
       clearInterval(intervalId);
     };
-  }, [gameStartDate, gameEndDate]);
+  }, [gameStartDate, gameEndDate, status]);
 
   return (
     <div className={styles.container}>
@@ -239,11 +312,29 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
             </>
           )}
         </div>
-        {isEasyMode && <p className={styles.attempts}>Осталось попытки : {lives}</p>}
+
+        <>
+          <div className={styles.containerImg}>
+            <button
+              className={styles.vision}
+              title="Прозрение"
+              hint=" На 5 секунд показываются все карты. Таймер длительности игры на это время останавливается."
+              onClick={vision}
+              disabled={!superPowers.vision}
+            />
+            <button
+              className={styles.alohomora}
+              title="Алохомора"
+              hint="Открывается случайная пара карт."
+              onClick={alohomora}
+              disabled={!superPowers.alohomora}
+            />
+          </div>
+        </>
 
         {status === STATUS_IN_PROGRESS ? <Button onClick={resetGame}>Начать заново</Button> : null}
       </div>
-
+      {isEasyMode && <p className={styles.attempts}>Осталось попытки : {lives}</p>}
       <div className={styles.cards}>
         {cards.map(card => (
           <Card

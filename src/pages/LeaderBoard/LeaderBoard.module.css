@@ -1,92 +1,181 @@
 .container {
-    width: 686px;
-    margin: 50px auto;
-  }
-  
-  .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-bottom: 40px;
-  }
-  
-  .text {
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 133%;
-    color: #fff;
-    padding: 8px;
-  }
-  
-  .leaderboard {
-    width: 686px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 48px;
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 16px 20px;
-    box-sizing: border-box;
-  }
-  
-  .leaderboard th {
-    font-family: "Poppins", sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 133%;
-    color: #999;
-  }
-  
-  
-  .position {
-    width: 80px;
-    text-align: left;
-  
-  }
-  
-  .user {
-    width: 200px;
-    text-align: left;
-  
-  }
-  
-  .achievements {
-    width: 100px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-  }
-  
-  .time {
-    width: 100px;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .tbody {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  
-  .leader {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    height: 48px;
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 16px 20px;
-    box-sizing: border-box;
-  
-    font-family: "Poppins", sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 133%;
-    color: #000;
-  }
+  width: 686px;
+  margin: 50px auto;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 40px;
+}
+
+.text {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 133%;
+  color: #fff;
+  padding: 8px;
+}
+
+.leaderboard {
+  width: 686px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-sizing: border-box;
+}
+
+.leaderboard th {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 133%;
+  color: #999;
+}
+
+.position {
+  width: 80px;
+  text-align: left;
+}
+
+.user {
+  width: 200px;
+  text-align: left;
+}
+
+.achievements {
+  width: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.time {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.tbody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.leader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-sizing: border-box;
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 133%;
+  color: #000;
+}
+
+.block_achievements {
+  position: relative;
+}
+
+.puzzle {
+  background-image: url(./images/puzzle.svg);
+}
+
+.puzzleGray {
+  background-image: url(./images/puzzleGray.svg);
+}
+
+.vision {
+  background-image: url(./images/vision.svg);
+}
+
+.visionGray {
+  background-image: url(./images/visionGray.svg);
+}
+
+.puzzle,
+.puzzleGray,
+.vision,
+.visionGray {
+  height: 32px;
+  width: 32px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  cursor: default;
+  z-index: 0;
+}
+
+[hint1],
+[hint2] {
+  position: relative;
+  cursor: hint;
+}
+
+[hint1]::after {
+  opacity: 0;
+  width: 172px;
+  height: 48px;
+  background-image: url(./images/diffBubble.svg);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  content: attr(hint1);
+  z-index: 1;
+  position: absolute;
+  top: -80px;
+  text-align: center;
+  transition: opacity 0.2s;
+
+  padding: 15px 15px;
+  border-radius: 12px;
+  color: rgb(0, 73, 128);
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+}
+
+[hint2]::after {
+  opacity: 0;
+  width: 134px;
+  height: 48px;
+  background-image: url(./images/nosupBubble.svg);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  content: attr(hint2);
+  z-index: 1;
+  position: absolute;
+  top: -80px;
+  text-align: center;
+  transition: opacity 0.2s;
+
+  padding: 15px 20px;
+  border-radius: 12px;
+  color: rgb(0, 73, 128);
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+}
+
+[hint1]:hover::after,
+[hint2]:hover::after {
+  opacity: 1;
+}

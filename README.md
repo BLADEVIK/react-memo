@@ -5,6 +5,8 @@
 Проект задеплоен на gh pages:
 https://skypro-web-developer.github.io/react-memo/
 
+Мой деплой gh pages:
+https://bladevik.github.io/react-memo/
 ## Разработка
 
 Проект реализован на основе шаблона [Create React App](https://github.com/facebook/create-react-app).
@@ -46,4 +48,5 @@ https://skypro-web-developer.github.io/react-memo/
 Если не получается закоммитить, попробуйте запустить эту команду и исправить все ошибки и предупреждения.
 
 ## Ожидаемое время: 3 часа
+
 ## Фактическое время: 5 часов

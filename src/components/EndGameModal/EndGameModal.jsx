@@ -8,43 +8,46 @@ import { Link } from "react-router-dom";
 import { getLeaderBoard, postLeaderBoard } from "../../api";
 import { useContext, useEffect, useState } from "react";
 import { GameContext } from "../../Context";
+import { AchievementsContext } from "../../AchievementContext";
 
 export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick }) {
-  const title = isWon ? "Вы попали на лидерборд!" : "Вы проиграли!";
-
-  const imgSrc = isWon ? celebrationImageUrl : deadImageUrl;
-
-  const imgAlt = isWon ? "celebration emodji" : "dead emodji";
-  const { level } = useContext(GameContext);
+  const { achievements } = useContext(AchievementsContext);
+  const { level, isEasyMode } = useContext(GameContext);
   const [leader, setLeader] = useState("Пользователь");
   const [newLeader, setNewLeader] = useState(false);
   const gameTime = gameDurationMinutes * 60 + gameDurationSeconds;
+
+  const title = isWon ? (level === "9" ? "Вы попали на лидерборд!" : "Вы победили!") : "Вы проиграли!";
+  const imgSrc = isWon ? celebrationImageUrl : deadImageUrl;
+  const imgAlt = isWon ? "celebration emodji" : "dead emodji";
   useEffect(() => {
-    if (level === "3" && isWon) {
-      getLeaderBoard().then(({ leaders }) => {
-        leaders = leaders.sort(function (a, b) {
-          return a.time - b.time;
-        });
-        if (leaders.length > 0 && leaders[0].time < gameTime) {
-          setNewLeader(true);
-        }
+    getLeaderBoard().then(({ leaders }) => {
+      leaders = leaders.sort(function (a, b) {
+        return b.time - a.time;
       });
-    }
+      console.log(leaders);
+      if (!isEasyMode && leaders.length > 0 && leaders[0].time > gameTime && level === "9") {
+        setNewLeader(true);
+      }
+    });
   }, []);
 
   function addPlayerToLeaders() {
+    onClick();
+
     postLeaderBoard({
       name: leader,
       time: gameTime,
+      achievements: achievements,
     })
       .then(({ leaders }) => {
-        console.log(leaders);
+        alert("Игрок успешно добавлен в список лидеров:", leaders);
+        setNewLeader(true);
       })
       .catch(error => {
         alert(error.message);
       });
   }
-
   return (
     <div className={styles.modal}>
       <img className={styles.image} src={imgSrc} alt={imgAlt} />
@@ -61,7 +64,6 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
       ) : (
         <div></div>
       )}
-
       <p className={styles.description}>Затраченное время:</p>
       <div className={styles.time}>
         {gameDurationMinutes.toString().padStart("2", "0")}.{gameDurationSeconds.toString().padStart("2", "0")}
@@ -71,7 +73,7 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
           <Button
             onClick={() => {
               addPlayerToLeaders(newLeader);
-              onClick();
+              // onClick();
             }}
           >
             Начать сначала
@@ -79,8 +81,8 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
           <Link to="/">
             <Button
               onClick={() => {
-                addPlayerToLeaders();
-                onClick();
+                addPlayerToLeaders(newLeader);
+                // onClick();
               }}
             >
               На главную

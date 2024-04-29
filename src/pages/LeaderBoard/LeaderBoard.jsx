@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { getLeaderBoard } from "../../api";
-import { useGameContext } from "../../Context";
+// import { useGameContext } from "../../Context";
 import styles from "./LeaderBoard.module.css";
 import { Button } from "../../components/Button/Button";
 import { Link } from "react-router-dom";
 export function LeaderBoard() {
-  const { leaderboardPlayers, setLeaderboardPlayers } = useGameContext();
-  const [isLoading, setIsLoading] = useState(true);
+  const [leaders, setLeaders] = useState([]);
 
   useEffect(() => {
     getLeaderBoard()
@@ -16,19 +15,15 @@ export function LeaderBoard() {
           leader = leader.sort(function (a, b) {
             return a.time - b.time;
           });
-          setLeaderboardPlayers(leader);
-          setIsLoading(false);
+          setLeaders(leader);
         } else {
-          alert("Данные LeaderBoard не были получены.");
+          console.error("Данные лидеров не были получены.");
         }
       })
       .catch(error => {
         console.log(error.message);
       });
   }, []);
-  if (isLoading) {
-    return "Loading LeaderBoard... ";
-  }
 
   return (
     <>
@@ -44,16 +39,35 @@ export function LeaderBoard() {
             <tr className={styles.leaderboard}>
               <th className={styles.position}>Позиция</th>
               <th className={styles.user}>Пользователь</th>
-              {/* <th className={styles.achievements}>Достижения</th> */}
+              <th className={styles.achievements}>Достижения</th>
               <th className={styles.time}>Время</th>
             </tr>
           </thead>
           <tbody className={styles.tbody}>
-            {leaderboardPlayers.map((leader, index) => (
+            {leaders.map((leader, index) => (
               <tr className={styles.leader} key={leader.id}>
                 <td className={styles.position}>#{index + 1}</td>
                 <td className={styles.user}>{leader.name}</td>
-                {/* <td className={styles.time}>{leader.time}</td> */}
+                <td className={styles.achievements}>
+                  {leader.achievements && (
+                    <div className={styles.block_achievements}>
+                      {leader.achievements.includes(1) ? (
+                        <button className={styles.puzzle} hint1="Игра пройдена в сложном режиме"></button>
+                      ) : (
+                        <button className={styles.puzzleGray} hint1="Игра пройдена в сложном режиме"></button>
+                      )}
+                    </div>
+                  )}
+                  {leader.achievements && (
+                    <div className={styles.block_achievements}>
+                      {leader.achievements.includes(2) ? (
+                        <button className={styles.vision} hint2="Игра пройдена без супер-сил"></button>
+                      ) : (
+                        <button className={styles.visionGray} hint2="Игра пройдена без супер-сил"></button>
+                      )}
+                    </div>
+                  )}
+                </td>
                 <td className={styles.time}>
                   {Math.floor(leader.time / 60)
                     .toString()
