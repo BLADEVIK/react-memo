@@ -5,9 +5,10 @@ import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
-import { useGameContext } from "../../Context";
+
 import { getLeaderBoard } from "../../api";
 
+import { useGameContext } from "../../Context";
 // Игра закончилась
 const STATUS_LOST = "STATUS_LOST";
 const STATUS_WON = "STATUS_WON";
@@ -56,6 +57,7 @@ function getTimerValue(startDate, endDate) {
  */
 export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   const [isPause, setIsPause] = useState(false);
+  const [isOpenCards, setIsOpenCards] = useState(false);
   const { leaderboardPlayers, setLeaderboardPlayers } = useGameContext();
   // console.log(leaderboardPlayers?.leaders[leaderboardPlayers?.leaders?.length - 1]);
   useEffect(() => {
@@ -92,8 +94,8 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setStatus(status);
   }
   function startGame() {
+    pauseTimer = false;
     setIsPause(isPause);
-    console.log(isPause);
     const startDate = new Date();
     setGameEndDate(null);
     setGameStartDate(startDate);
@@ -101,10 +103,12 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setStatus(STATUS_IN_PROGRESS);
   }
   function resetGame() {
+    setLives(3);
     setSuperPowers({
       vision: true,
       alohomora: true,
     });
+    pauseTimer = false;
     setIsPause(false);
     setGameStartDate(null);
     setGameEndDate(null);
@@ -120,6 +124,9 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
    * - "Игра продолжается", если не случилось первых двух условий
    */
   const openCard = clickedCard => {
+    if (isOpenCards) {
+      return;
+    }
     // Если карта уже открыта, то ничего не делаем
     if (clickedCard.open) {
       return;
@@ -183,8 +190,10 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
         nextCards.map(elem => {
           if (openCardsWithoutPair.some(openCard => openCard.id === elem.id)) {
             if (elem.open) {
+              setIsOpenCards(true);
               setTimeout(() => {
                 setCards(prev => {
+                  setIsOpenCards(false);
                   return prev.map(el => (el.id === elem.id ? { ...el, open: false } : el));
                 });
               }, 1000);

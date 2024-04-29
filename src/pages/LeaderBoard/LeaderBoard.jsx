@@ -54,7 +54,7 @@ export function LeaderBoard() {
                       {leader.achievements.includes(1) ? (
                         <button className={styles.puzzle} hint1="Игра пройдена в сложном режиме"></button>
                       ) : (
-                        <button className={styles.puzzleGray} hint1="Игра пройдена в сложном режиме"></button>
+                        <button className={styles.puzzleGray}></button>
                       )}
                     </div>
                   )}
@@ -63,7 +63,7 @@ export function LeaderBoard() {
                       {leader.achievements.includes(2) ? (
                         <button className={styles.vision} hint2="Игра пройдена без супер-сил"></button>
                       ) : (
-                        <button className={styles.visionGray} hint2="Игра пройдена без супер-сил"></button>
+                        <button className={styles.visionGray}></button>
                       )}
                     </div>
                   )}

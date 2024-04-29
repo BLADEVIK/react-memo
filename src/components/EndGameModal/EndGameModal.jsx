@@ -25,7 +25,6 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
       leaders = leaders.sort(function (a, b) {
         return b.time - a.time;
       });
-      console.log(leaders);
       if (!isEasyMode && leaders.length > 0 && leaders[0].time > gameTime && level === "9") {
         setNewLeader(true);
       }
@@ -41,7 +40,7 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
       achievements: achievements,
     })
       .then(({ leaders }) => {
-        alert("Игрок успешно добавлен в список лидеров:", leaders);
+        alert("Игрок успешно добавлен в список лидеров");
         setNewLeader(true);
       })
       .catch(error => {
@@ -53,14 +52,26 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
       <img className={styles.image} src={imgSrc} alt={imgAlt} />
       <h2 className={styles.title}>{title}</h2>
       {newLeader ? (
-        <input
-          className={styles.input_user}
-          type="text"
-          placeholder={"Пользователь "}
-          onChange={e => {
-            setLeader(e.target.value);
-          }}
-        />
+        <>
+          <input
+            className={styles.input_user}
+            type="text"
+            placeholder={"Пользователь "}
+            onChange={e => {
+              setLeader(e.target.value);
+            }}
+          />
+          <Link to={"/leaderboard"}>
+            <Button
+              onClick={() => {
+                addPlayerToLeaders(newLeader);
+                // onClick();
+              }}
+            >
+              Добавить результат!
+            </Button>
+          </Link>
+        </>
       ) : (
         <div></div>
       )}
@@ -70,23 +81,9 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
       </div>
       {newLeader ? (
         <>
-          <Button
-            onClick={() => {
-              addPlayerToLeaders(newLeader);
-              // onClick();
-            }}
-          >
-            Начать сначала
-          </Button>
+          <Button>Начать сначала</Button>
           <Link to="/">
-            <Button
-              onClick={() => {
-                addPlayerToLeaders(newLeader);
-                // onClick();
-              }}
-            >
-              На главную
-            </Button>
+            <Button>На главную</Button>
           </Link>
         </>
       ) : (

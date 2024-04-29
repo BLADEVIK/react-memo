@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-
 export const GameContext = createContext();
 export const useGameContext = () => {
   return useContext(GameContext);
