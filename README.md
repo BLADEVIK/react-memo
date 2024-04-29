@@ -1,10 +1,6 @@
 # MVP Карточная игра "Мемо"
 
 В этом репозитории реализован MVP карточкой игры "Мемо" по [тех.заданию](./docs/mvp-spec.md)
-
-Проект задеплоен на gh pages:
-https://skypro-web-developer.github.io/react-memo/
-
 Мой деплой gh pages:
 https://bladevik.github.io/react-memo/
 ## Разработка
