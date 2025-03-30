@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/react-memo/static/css/main.164b9f30.css",
+    "main.js": "/react-memo/static/js/main.584162d3.js",
+    "static/media/StratosSkyeng.woff2": "/react-memo/static/media/StratosSkyeng.ce93393e831d32412096.woff2",
+    "static/media/celebration.png": "/react-memo/static/media/celebration.2577e3c3835ac1f32429.png",
+    "static/media/dead.png": "/react-memo/static/media/dead.bfb3f81b5110f1b62252.png",
+    "static/media/visionCards.svg": "/react-memo/static/media/visionCards.ac0999493a73395550e3.svg",
+    "static/media/visionGray.svg": "/react-memo/static/media/visionGray.4f9f882e8de22a1982be.svg",
+    "static/media/alohomora.svg": "/react-memo/static/media/alohomora.8489a466a31be600f5e1.svg",
+    "static/media/puzzleGray.svg": "/react-memo/static/media/puzzleGray.216f5e1723576ba68c6a.svg",
+    "static/media/puzzle.svg": "/react-memo/static/media/puzzle.dba12aeebaa5a7a124fa.svg",
+    "static/media/vision.svg": "/react-memo/static/media/vision.f673fbd0b0d229b4d71c.svg",
+    "static/media/сard-shirt.svg": "/react-memo/static/media/сard-shirt.ee1c021f7ee4ddc65293b8afcc81859d.svg",
+    "static/media/cross.svg": "/react-memo/static/media/cross.a67a9b79b3c4428c4927895e6c820391.svg",
+    "index.html": "/react-memo/index.html",
+    "static/media/hearts.svg": "/react-memo/static/media/hearts.61a332d669720824455d75936096b657.svg",
+    "static/media/spades.svg": "/react-memo/static/media/spades.d5657ff5be305701be575ad4403987f4.svg",
+    "static/media/diffBubble.svg": "/react-memo/static/media/diffBubble.eeb76ee23aa6cf67ec6c.svg",
+    "static/media/nosupBubble.svg": "/react-memo/static/media/nosupBubble.d6c9b79806791110f55c.svg",
+    "static/media/diamonds.svg": "/react-memo/static/media/diamonds.60153c09fb0fa0f9b5bab2a62d795342.svg",
+    "main.164b9f30.css.map": "/react-memo/static/css/main.164b9f30.css.map",
+    "main.584162d3.js.map": "/react-memo/static/js/main.584162d3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.164b9f30.css",
+    "static/js/main.584162d3.js"
+  ]
+}
