@@ -29,7 +29,7 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
         setNewLeader(true);
       }
     });
-  }, []);
+  }, [gameTime, isEasyMode, level]);
 
   function addPlayerToLeaders() {
     onClick();
