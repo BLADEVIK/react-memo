@@ -1,5 +1,5 @@
 import { shuffle } from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { generateDeck } from "../../utils/cards";
 import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
@@ -64,7 +64,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     getLeaderBoard().then(res => {
       setLeaderboardPlayers(res);
     });
-  }, []);
+  }, [setLeaderboardPlayers]);
   // В cards лежит игровое поле - массив карт и их состояние открыта\закрыта
   const [cards, setCards] = useState([]);
   // Текущий статус игры
@@ -93,7 +93,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setGameEndDate(new Date());
     setStatus(status);
   }
-  function startGame() {
+  const startGame = useCallback(() => {
     pauseTimer = false;
     setIsPause(isPause);
     const startDate = new Date();
@@ -101,7 +101,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setGameStartDate(startDate);
     setTimer(getTimerValue(startDate, null));
     setStatus(STATUS_IN_PROGRESS);
-  }
+  }, [isPause]);
   function resetGame() {
     setLives(3);
     setSuperPowers({
@@ -187,7 +187,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
       if (isEasyMode) {
         setLives(lives - 1);
 
-        nextCards.map(elem => {
+        nextCards.forEach(elem => {
           if (openCardsWithoutPair.some(openCard => openCard.id === elem.id)) {
             if (elem.open) {
               setIsOpenCards(true);
@@ -281,7 +281,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     return () => {
       clearTimeout(timerId);
     };
-  }, [status, pairsCount, previewSeconds]);
+  }, [status, pairsCount, previewSeconds, startGame]);
 
   // Обновляем значение таймера в интервале
   useEffect(() => {
